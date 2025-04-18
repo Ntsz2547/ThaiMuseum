@@ -20,7 +20,7 @@
     <script>
       var esriConfig = {
         apiKey:
-          "AAPTxy8BH1VEsoebNVZXo8HurNJ2CoRxo3i6iJz33op9AG1fg6lOAB-DfHRPzXcZf4nTm9vzV2MoAyA7nDFwS_9rGbe9BuI6MS7fWXWuD96qfcwT79-QIKt8xY4z4lji3lfJllUlEsU7DBcJXlbDFDmQSuQjdy31Kzca49vAyrq1AremdHsh6zNUVtzrjM0y4LmCPRcZYhOetPqu4vze-KeejbdjPqhZQqhzUnZbAkmRNpQ.AT1_xog6WdF3",
+          "AAPTxy8BH1VEsoebNVZXo8HurNJ2CoRxo3i6iJz33op9AG1zeCNpOwDjKVYK1VHCgh1LUCVtfbdVkdkkvpWDmaWXLvkWKiksNoI2IK53z9R_Sh8v7J-JEVVTJvtNt6QE8_EMQR5pJIUKK1go9gBVRynJiUhq0lif0TP2nG0syUcHlr_VbTuEdrAoVbnuPy_sSRi94St6vV9gjiMCctpQ37CPkDnOHPPzk7YzLpDtQ2LFrGI.AT1_JiJunJN8",
       };
     </script>
     <script src="https://js.arcgis.com/4.27/"></script>
@@ -28,7 +28,7 @@
   <body>
     <div id="viewDiv"></div>
 
-    <script>
+    <script> 
       require([
         "esri/Map",
         "esri/views/MapView",
@@ -39,12 +39,12 @@
         
       ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer,Editor) {
         const museumFeatureLayer = new FeatureLayer({
-          url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/ThaiMuse/FeatureServer",
+          url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/MuseLayer/FeatureServer",
           outFields: ["*"],
           popupTemplate: {
             title: "{Name}",
             content: `
-              <b>ประเภท:</b> {Type}<br>
+              <b>ประเภท:</b> {MuseType}<br>
               <b>จังหวัด:</b> {Province}<br>
               <b>เวลาทำการ:</b> {OpenHours}<br>
               <img src="{ImageURL}" width="200px">
@@ -58,7 +58,7 @@
           popupTemplate: {
             title: "{Name}",
             content: `
-              <b>ประเภท:</b> {Type}<br>
+              <b>ประเภท:</b> {MuseType}<br>
               <b>จังหวัด:</b> {Province}<br>
               <b>รายละเอียด:</b> {Description}
             `
@@ -67,25 +67,23 @@
 
         // 3. UniqueValueRenderer
         const museumRenderer = new UniqueValueRenderer({
-          field: "Type",
+          field: "MuseType",
           uniqueValueInfos: [
             {
-              value: "พิพิธภัณฑ์ศิลปะ",
+              value: "Art Museum",
               symbol: {
-                type: "picture-marker",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Museum_icon.svg/1024px-Museum_icon.svg.png",
-                width: "24px",
-                height: "24px"
+                type: "simple-marker",
+                color: "blue",
+                size:"12px",
               },
               label: "พิพิธภัณฑ์ศิลปะ"
             },
             {
-              value: "พิพิธภัณฑ์ท้องถิ่น",
+              value: "Cultural Museum",
               symbol: {
-                type: "picture-marker",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Map_marker_icon_%E2%80%93_Nicolas_Mollet_%E2%80%93_Museum_%E2%80%93_Culture_%E2%80%93_White.png/600px-Map_marker_icon_%E2%80%93_Nicolas_Mollet_%E2%80%93_Museum_%E2%80%93_Culture_%E2%80%93_White.png",
-                width: "24px",
-                height: "24px"
+                type: "simple-marker",
+                color: "green",
+                size:"12px",
               },
               label: "พิพิธภัณฑ์ท้องถิ่น"
             }
@@ -93,7 +91,7 @@
         });
         museumFeatureLayer.renderer = museumRenderer;
 
-        // 4. Map & View
+      
         const map = new Map({
           basemap: "streets-navigation-vector",
           layers: [museumFeatureLayer, csvLayer]

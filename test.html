@@ -35,7 +35,9 @@
         "esri/views/MapView",
         "esri/layers/FeatureLayer",
         "esri/widgets/Search",
-      ], function (Map, MapView, FeatureLayer, Search) {
+        "esri/renderers/UniqueValueRenderer",
+        "esri/renderers/HeatmapRenderer",
+      ], function (Map, MapView, FeatureLayer, Search, UniqueValueRenderer, HeatmapRenderer) {
         // โจทย์:
         // 1. เปลี่ยน API Key เป็นของตัวเอง เพื่อให้เข้าถึง Feature Layer ที่ตัวเองสร้างได้
         // 2. Add Feature Layer ที่เก็บข้อมูล Incident ไว้ ด้วย Url Map Service ของตัวเอง
@@ -110,7 +112,7 @@
         };
  
         // สร้าง FeatureLayer
-        const incidentFeatureLayer = new FeatureLayer({
+        const incidentFeatureLayer = new UniqueValueRenderer({
           url: "https://services.arcgis.com/7DuUQqhsHnXFy4Oz/arcgis/rest/services/IncidentLayer/FeatureServer",
           outFields: ["*"],
           renderer: heatmapRenderer,
