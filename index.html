@@ -20,7 +20,7 @@
     <script>
       var esriConfig = {
         apiKey:
-          "AAPTxy8BH1VEsoebNVZXo8HurBmswd1x9NEzpQ5mSjdav-GYXfIbmqKQwYHZmPFWgM9jIAnxmDjnHaZO5UkHVikQ26gTdBPtVgN_xtM1w8oyN5QlzbzvMfbtaV8utrexOpSUFeQNCHqrXFaZy_rH98dsd-KA9SwFaBs0u0euoOlTntEUJvdEPgRHD3SHjifaAOvOdD7lauycHt5TPlHpXcWoyHVv9QxTnNc5lFE7r5gq4AE.AT1_2erFlJJz",
+          "AAPTxy8BH1VEsoebNVZXo8HurNJ2CoRxo3i6iJz33op9AG1fg6lOAB-DfHRPzXcZf4nTm9vzV2MoAyA7nDFwS_9rGbe9BuI6MS7fWXWuD96qfcwT79-QIKt8xY4z4lji3lfJllUlEsU7DBcJXlbDFDmQSuQjdy31Kzca49vAyrq1AremdHsh6zNUVtzrjM0y4LmCPRcZYhOetPqu4vze-KeejbdjPqhZQqhzUnZbAkmRNpQ.AT1_xog6WdF3",
       };
     </script>
     <script src="https://js.arcgis.com/4.27/"></script>
@@ -34,10 +34,12 @@
         "esri/views/MapView",
         "esri/layers/FeatureLayer",
         "esri/layers/CSVLayer",
-        "esri/renderers/UniqueValueRenderer"
-      ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer) {
+        "esri/renderers/UniqueValueRenderer",
+        "esri/widgets/Editor",
+        
+      ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer,Editor) {
         const museumFeatureLayer = new FeatureLayer({
-          url: "https://services5.arcgis.com/whmg2BPqtzp2pczh/arcgis/rest/services/Incident/FeatureServer/0",
+          url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/ThaiMuse/FeatureServer",
           outFields: ["*"],
           popupTemplate: {
             title: "{Name}",
@@ -102,6 +104,20 @@
           map: map,
           center: [100.523816, 13.728993],
           zoom: 13
+        });
+
+        view.when(() => {
+          // 1. Editor Widget
+          const editor = new Editor({
+            view: view,
+            layerInfos: [
+              {
+                layer: museumFeatureLayer,
+                enabled: true
+              }
+            ]
+          });
+          view.ui.add(editor, "top-right");
         });
       });
     </script>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌍 Incident Repor Web Application</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.27/esri/themes/light/main.css"
+    />
+    <script>
+      // *** แก้ apiKey เป็นของตัวเอง
+      var esriConfig = {
+        apiKey:
+          "AAPTxy8BH1VEsoebNVZXo8HurPLXVbze651K5NDgHExQjRqMPlLhNjrtoTuBlKB9p7c2JsBQkR-W9nAqn8b9QOPJFAermqzrchIsAP6kxaVFwkmePrKN7PripcPGYA5r_sJaQ8naMA4pnK5-OlByYQDJ4vMYx27IGCpCx3Q0NWx_ltnOp7EtBgTCEhuM_Ygy_uVzF7qYvcS5eGmmNz2kDxrxmYDGCIJjW0sTkOtS7dVg8OY.AT1_GZQqD3nq",
+      };
+    </script>
+    <script src="https://js.arcgis.com/4.27/"></script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+ 
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/Search",
+      ], function (Map, MapView, FeatureLayer, Search) {
+        // โจทย์:
+        // 1. เปลี่ยน API Key เป็นของตัวเอง เพื่อให้เข้าถึง Feature Layer ที่ตัวเองสร้างได้
+        // 2. Add Feature Layer ที่เก็บข้อมูล Incident ไว้ ด้วย Url Map Service ของตัวเอง
+        // 3. แสดงรายการ Incident ที่ถูก Report เข้ามาบนแผนที่ โดยแบ่งแยก Symbol ตาม Field: "IncidentType" มากกว่า 2 Type ขึ้นไป
+        // เช่น ถ้า IncidentType เป็น "ไฟไหม้" ให้ Render ด้วย symbol นึง,  แต่ถ้าเป็น "น้ำท่วม" ให้ Render อีก symbol นึง (ตัวอย่าง จะกำหนด type อื่นๆก็ได้)
+        // 4. เวลา Zoom ไกลๆ จะต้องสามารถแสดงเป็น Heatmap ได้
+        // 5. เวลา Zoom ใกล้ๆ จะต้องสามารถแสดงเป็น Symbol ตามประเภทของ IncidentType ได้
+        // 6. จะต้องมี Search Widget ที่สามารถค้นหาข้อมูล Incident ได้ตาม "รายละเอียด, ชื่อผู้แจ้ง, และ ประเภทของ Incident"
+        // ระยะเวลา 1 ชั่วโมง
+        // Hint: ดูการบ้านเก่าๆ หรือดูลิ้งตัวอย่างด้านล่างเป็นตัวช่วย
+        // Feature Layer: https://developers.arcgis.com/javascript/latest/sample-code/layers-featurelayer/
+        // Render แบบแยกตาม type ใช้ https://developers.arcgis.com/javascript/latest/api-reference/esri-renderers-UniqueValueRenderer.html
+        // Render แบบ Heatmap:
+        // https://developers.arcgis.com/javascript/latest/sample-code/visualization-heatmap/
+        // https://developers.arcgis.com/javascript/latest/api-reference/esri-renderers-HeatmapRenderer.html
+        // Search Widget: https://developers.arcgis.com/javascript/latest/sample-code/widgets-search-3d/
+ 
+        const uniqueRender = {
+          type: "unique-value",
+          field: "IncidentType",
+          defaultSymbol: {
+            type: "picture-marker",
+            url: "https://cdn-icons-png.flaticon.com/512/7334/7334593.png",
+            width: "48px",
+            height: "48px",
+          },
+          uniqueValueInfos: [
+            {
+              value: "ไฟไหม้",
+              symbol: {
+                type: "picture-marker",
+                url: "https://cdn-icons-png.flaticon.com/512/9922/9922138.png", //รูปไฟไหม้
+                width: "48px",
+                height: "48px",
+              },
+            },
+            {
+              value: "น้ำท่วม",
+              symbol: {
+                type: "picture-marker",
+                url: "https://cdn-icons-png.flaticon.com/512/17639/17639265.png", //รูปน้ำท่วม
+                width: "48px",
+                height: "48px",
+              },
+            },
+          ],
+        };
+ 
+        const heatmapRenderer = {
+          type: "heatmap",
+          colorStops: [
+            { ratio: 0, color: "rgba(255, 255, 255, 0)" },
+            { ratio: 0.2, color: "rgba(255, 255, 255, 1)" },
+            { ratio: 0.5, color: "rgba(255, 140, 0, 1)" },
+            { ratio: 0.8, color: "rgba(255, 140, 0, 1)" },
+            { ratio: 1, color: "rgba(255, 0, 0, 1)" },
+          ],
+          minDensity: 0,
+          maxDensity: 0.01,
+          radius: 10,
+        };
+ 
+        // 🔹 Define Pin Renderer
+        const pinRenderer = {
+          type: "simple",
+          symbol: {
+            type: "picture-marker",
+            url: "https://cdn-icons-png.flaticon.com/512/7334/7334593.png",
+            width: "48px",
+            height: "48px",
+          },
+        };
+ 
+        // สร้าง FeatureLayer
+        const incidentFeatureLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/7DuUQqhsHnXFy4Oz/arcgis/rest/services/IncidentLayer/FeatureServer",
+          outFields: ["*"],
+          renderer: heatmapRenderer,
+          popupTemplate: {
+            title: "{IncidentType}",
+            content: `
+            <b>📍 ผู้แจ้งเหตุ:</b> {Reporter} <br>
+            <b>⭐ รายละเอียด:</b> {Description} <br>
+          `,
+          },
+        });
+ 
+        // 🔹 สร้างแผนที่
+        const map = new Map({
+          basemap: "streets-navigation-vector",
+          layers: [incidentFeatureLayer],
+        });
+ 
+        // 🔹 สร้าง View
+        const view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [100.5231, 13.7367], // พิกัดกลางของกรุงเทพฯ
+          zoom: 12,
+        });
+ 
+        const searchWidget = new Search({
+          view: view,
+          sources: [
+            {
+              layer: incidentFeatureLayer,
+              name: "Search Incident", // ชื่อสำหรับแสดง data source
+              searchFields: ["IncidentType", "Reporter", "Description"],
+              displayField: "IncidentType",
+              exactMatch: false,
+              outFields: ["*"],
+              placeholder: "🔍 ค้นหาร้านเหตุการณ์...",
+              suggestionTemplate: "{IncidentType} - {Reporter} - {Description}",
+              popupTemplate: {
+                title: "{IncidentType}",
+                content: `
+                 <b>📍 ผู้แจ้งเหตุ:</b> {Reporter} <br>
+                 <b>⭐ รายละเอียด:</b> {Description} <br>
+                 `,
+              },
+            },
+          ],
+        });
+        view.ui.add(searchWidget, {
+          position: "top-right",
+        });
+ 
+        // 🔹 Change Renderer on Zoom
+        view.watch("zoom", function (newZoom) {
+          if (newZoom >= 15) {
+            incidentFeatureLayer.renderer = uniqueRender; // Switch to pin renderer at higher zoom levels
+          } else {
+            incidentFeatureLayer.renderer = heatmapRenderer; // Use heatmap renderer at lower zoom levels
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
+ 
