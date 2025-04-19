@@ -62,6 +62,8 @@
               <b>ประเภท:</b> {MuseType}<br>
               <b>จังหวัด:</b> {Province}<br>
               <b>รายละเอียด:</b> {Description}
+              <img src="{ImageURL}" width="200px">
+
             `
           }
         });
@@ -99,9 +101,9 @@
             {
               value: "Art Museum",
               symbol: {
-                type: "simple-marker",
-                color: "blue",
-                size:"12px",
+                type: "picture-marker",
+                url: "/assets/artpin.png",
+                size:"25px",
               },
               label: "พิพิธภัณฑ์ศิลปะ"
             },
