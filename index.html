@@ -37,6 +37,7 @@
         "esri/renderers/UniqueValueRenderer",
         "esri/widgets/Editor",
         
+        
       ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer,Editor) {
         const museumFeatureLayer = new FeatureLayer({
           url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/MuseLayer/FeatureServer",
@@ -85,12 +86,37 @@
                 color: "green",
                 size:"12px",
               },
-              label: "พิพิธภัณฑ์ท้องถิ่น"
+              label: "พิพิธภัณฑ์วัฒนธรรม"
             }
           ]
         });
         museumFeatureLayer.renderer = museumRenderer;
 
+        const csvRenderer = {
+          type: "unique-value",
+          field: "MuseType",
+          uniqueValueInfos: [
+            {
+              value: "Art Museum",
+              symbol: {
+                type: "simple-marker",
+                color: "blue",
+                size:"12px",
+              },
+              label: "พิพิธภัณฑ์ศิลปะ"
+            },
+            {
+              value: "Cultural Museum",
+              symbol: {
+                type: "simple-marker",
+                color: "green",
+                size:"12px",
+              },
+              label: "พิพิธภัณฑ์วัฒนธรรม"
+            }
+          ]
+        };
+        csvLayer.renderer = csvRenderer;
       
         const map = new Map({
           basemap: "streets-navigation-vector",
