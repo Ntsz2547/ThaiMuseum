@@ -36,9 +36,10 @@
         "esri/layers/CSVLayer",
         "esri/renderers/UniqueValueRenderer",
         "esri/widgets/Editor",
+        "esri/widgets/Search",
         
         
-      ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer,Editor) {
+      ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer,Editor,Search) {
         const museumFeatureLayer = new FeatureLayer({
           url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/MuseLayer/FeatureServer",
           outFields: ["*"],
@@ -144,6 +145,56 @@
             ]
           });
           view.ui.add(editor, "top-right");
+        });
+
+        // 2. Search Widget
+        const searchWidget = new Search({
+          view: view,
+          includeDefaultSources: false, // ปิดการค้นหาในแหล่งข้อมูลอื่น
+          sources: [
+            {
+              layer: museumFeatureLayer,
+              name: "Found Museum ",
+              searchFields: ["Name", "Province"],
+              displayField: "Name",
+              exactMatch: false,
+              outFields: ["*"],
+              placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน Feature Layer...",
+              suggestionTemplate: "{Name} - {Province}",
+              popupTemplate: {
+                title: "{Name}",
+                content: `
+                  <b>ประเภท:</b> {MuseType}<br>
+                  <b>จังหวัด:</b> {Province}<br>
+                  <b>เวลาทำการ:</b> {OpenHours}<br>
+                  <img src="{ImageURL}" width="200px">
+                `
+              }
+            },
+            {
+              layer: csvLayer,
+              name: "Found Museum",
+              searchFields: ["Name", "Province"],
+              displayField: "Name",
+              exactMatch: false,
+              outFields: ["*"],
+              placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน CSV Layer...",
+              suggestionTemplate: "{Name} - {Province}",
+              popupTemplate: {
+                title: "{Name}",
+                content: `
+                  <b>ประเภท:</b> {MuseType}<br>
+                  <b>จังหวัด:</b> {Province}<br>
+                  <b>รายละเอียด:</b> {Description}<br>
+                  <img src="{ImageURL}" width="200px">
+                `
+              }
+            }
+          ]
+        });
+        view.ui.add(searchWidget, {
+          position: "top-left",
+          index: 2
         });
       });
     </script>
