@@ -30,172 +30,207 @@
 
     <script> 
       require([
-        "esri/Map",
-        "esri/views/MapView",
-        "esri/layers/FeatureLayer",
-        "esri/layers/CSVLayer",
-        "esri/renderers/UniqueValueRenderer",
-        "esri/widgets/Editor",
-        "esri/widgets/Search",
-        
-        
-      ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer,Editor,Search) {
-        const museumFeatureLayer = new FeatureLayer({
-          url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/MuseLayer/FeatureServer",
-          outFields: ["*"],
-          popupTemplate: {
-            title: "{Name}",
-            content: `
-              <b>ประเภท:</b> {MuseType}<br>
-              <b>จังหวัด:</b> {Province}<br>
-              <b>เวลาทำการ:</b> {OpenHours}<br>
-              <img src="{ImageURL}" width="200px">
-            `
-          }
-        });
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/layers/CSVLayer",
+      "esri/renderers/UniqueValueRenderer",
+      "esri/widgets/Editor",
+      "esri/widgets/Search",
+      "esri/widgets/Sketch",
+      "esri/layers/GraphicsLayer"
+      ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer, Editor, Search, Sketch, GraphicsLayer) {
+      const museumFeatureLayer = new FeatureLayer({
+        url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/MuseLayer/FeatureServer",
+        outFields: ["*"],
+        popupTemplate: {
+        title: "{Name}",
+        content: `
+          <b>ประเภท:</b> {MuseType}<br>
+          <b>จังหวัด:</b> {Province}<br>
+          <b>เวลาทำการ:</b> {OpenHours}<br>
+          <img src="{ImageURL}" width="200px">
+        `
+        }
+      });
 
-        // 2. CSV Layer (พิพิธภัณฑ์ที่ยังไม่ได้ลงทะเบียน)
-        const csvLayer = new CSVLayer({
-          url: "./thai_museums.csv",
-          popupTemplate: {
-            title: "{Name}",
-            content: `
-              <b>ประเภท:</b> {MuseType}<br>
-              <b>จังหวัด:</b> {Province}<br>
-              <b>รายละเอียด:</b> {Description}
-              <img src="{ImageURL}" width="200px">
+      const csvLayer = new CSVLayer({
+        url: "./thai_museums.csv",
+        popupTemplate: {
+        title: "{Name}",
+        content: `
+          <b>ประเภท:</b> {MuseType}<br>
+          <b>จังหวัด:</b> {Province}<br>
+          <b>รายละเอียด:</b> {Description}
+          <img src="{ImageURL}" width="200px">
+        `
+        }
+      });
 
-            `
-          }
-        });
+      const museumRenderer = new UniqueValueRenderer({
+        field: "MuseType",
+        uniqueValueInfos: [
+        {
+          value: "Art Museum",
+          symbol: {
+          type: "picture-marker",
+          url: "/assets/artpin.png",
+          size: "50px",
+          },
+          label: "พิพิธภัณฑ์ศิลปะ"
+        },
+        {
+          value: "Cultural Museum",
+          symbol: {
+          type: "picture-marker",
+          url: "/assets/culturalpin.png",
+          size: "50px",
+          },
+          label: "พิพิธภัณฑ์วัฒนธรรม"
+        }
+        ]
+      });
+      museumFeatureLayer.renderer = museumRenderer;
 
-        // 3. UniqueValueRenderer
-        const museumRenderer = new UniqueValueRenderer({
-          field: "MuseType",
-          uniqueValueInfos: [
-            {
-              value: "Art Museum",
-              symbol: {
-                type: "picture-marker",
-                url: "/assets/artpin.png",
-                size:"50px",
-              },
-              label: "พิพิธภัณฑ์ศิลปะ"
-            },
-            {
-              value: "Cultural Museum",
-              symbol: {
-                type: "picture-marker",
-                url: "/assets/culturalpin.png",
-                size:"50px",
-              },
-              label: "พิพิธภัณฑ์วัฒนธรรม"
-            }
-          ]
-        });
-        museumFeatureLayer.renderer = museumRenderer;
-
-        const csvRenderer = {
-          type: "unique-value",
-          field: "MuseType",
-          uniqueValueInfos: [
-            {
-              value: "Art Museum",
-              symbol: {
-                type: "picture-marker",
-                url: "/assets/artpin.png",
-                size:"50px",
-              },
-              label: "พิพิธภัณฑ์ศิลปะ"
-            },
-            {
-              value: "Cultural Museum",
-              symbol: {
-                type: "picture-marker",
-                url: "/assets/culturalpin.png",
-                size:"50px",
-              },
-              label: "พิพิธภัณฑ์วัฒนธรรม"
-            }
-          ]
-        };
-        csvLayer.renderer = csvRenderer;
+      const csvRenderer = {
+        type: "unique-value",
+        field: "MuseType",
+        uniqueValueInfos: [
+        {
+          value: "Art Museum",
+          symbol: {
+          type: "picture-marker",
+          url: "/assets/artpin.png",
+          size: "50px",
+          },
+          label: "พิพิธภัณฑ์ศิลปะ"
+        },
+        {
+          value: "Cultural Museum",
+          symbol: {
+          type: "picture-marker",
+          url: "/assets/culturalpin.png",
+          size: "50px",
+          },
+          label: "พิพิธภัณฑ์วัฒนธรรม"
+        }
+        ]
+      };
+      csvLayer.renderer = csvRenderer;
       
-        const map = new Map({
-          basemap: "streets-navigation-vector",
-          layers: [museumFeatureLayer, csvLayer]
-        });
+      const map = new Map({
+        basemap: "streets-navigation-vector",
+        layers: [museumFeatureLayer, csvLayer]
+      });
 
-        const view = new MapView({
-          container: "viewDiv",
-          map: map,
-          center: [100.523816, 13.728993],
-          zoom: 13
-        });
+      const view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [100.523816, 13.728993],
+        zoom: 13
+      });
 
-        view.when(() => {
-          // 1. Editor Widget
-          const editor = new Editor({
-            view: view,
-            layerInfos: [
-              {
-                layer: museumFeatureLayer,
-                enabled: true
-              }
-            ]
-          });
-          view.ui.add(editor, "top-right");
+      view.when(() => {
+        const editor = new Editor({
+        view: view,
+        layerInfos: [
+          {
+          layer: museumFeatureLayer,
+          enabled: true
+          }
+        ]
         });
+        view.ui.add(editor, "top-right");
 
-        // 2. Search Widget
-        const searchWidget = new Search({
-          view: view,
-          includeDefaultSources: false, // ปิดการค้นหาในแหล่งข้อมูลอื่น
-          sources: [
-            {
-              layer: museumFeatureLayer,
-              name: "Found Museum ",
-              searchFields: ["Name", "Province"],
-              displayField: "Name",
-              exactMatch: false,
-              outFields: ["*"],
-              placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน Feature Layer...",
-              suggestionTemplate: "{Name} - {Province}",
-              popupTemplate: {
-                title: "{Name}",
-                content: `
-                  <b>ประเภท:</b> {MuseType}<br>
-                  <b>จังหวัด:</b> {Province}<br>
-                  <b>เวลาทำการ:</b> {OpenHours}<br>
-                  <img src="{ImageURL}" width="200px">
-                `
-              }
+        const graphicsLayer = new GraphicsLayer();
+        map.add(graphicsLayer);
+
+        // Create a Sketch widget for drawing shapes
+        const sketch = new Sketch({
+        view: view,
+        layer: graphicsLayer
+        });
+        view.ui.add(sketch, "top-left");
+
+        sketch.on("create", (event) => {
+        if (event.state === "complete") {
+          const geometry = event.graphic.geometry;
+
+          // Apply filter effect to museumFeatureLayer
+          museumFeatureLayer.effect = {
+            filter: {
+              geometry: geometry,
+              spatialRelationship: "intersects"
             },
-            {
-              layer: csvLayer,
-              name: "Found Museum",
-              searchFields: ["Name", "Province"],
-              displayField: "Name",
-              exactMatch: false,
-              outFields: ["*"],
-              placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน CSV Layer...",
-              suggestionTemplate: "{Name} - {Province}",
-              popupTemplate: {
-                title: "{Name}",
-                content: `
-                  <b>ประเภท:</b> {MuseType}<br>
-                  <b>จังหวัด:</b> {Province}<br>
-                  <b>รายละเอียด:</b> {Description}<br>
-                  <img src="{ImageURL}" width="200px">
-                `
-              }
-            }
-          ]
+            includeEffect: "drop-shadow(0px 0px 5px black)",
+            excludeEffect: "opacity(30%)"
+          };
+
+          // Apply filter effect to csvLayer
+          csvLayer.effect = {
+            filter: {
+              geometry: geometry,
+              spatialRelationship: "intersects"
+            },
+            includeEffect: "drop-shadow(0px 0px 5px black)",
+            excludeEffect: "opacity(30%)"
+          };
+        } else if (event.state === "cancel") {
+          // Reset effects when drawing is canceled
+          museumFeatureLayer.effect = null;
+          csvLayer.effect = null;
+        }
         });
-        view.ui.add(searchWidget, {
-          position: "top-left",
-          index: 2
-        });
+      });
+
+      const searchWidget = new Search({
+        view: view,
+        includeDefaultSources: false,
+        sources: [
+        {
+          layer: museumFeatureLayer,
+          name: "Found Museum ",
+          searchFields: ["Name", "Province"],
+          displayField: "Name",
+          exactMatch: false,
+          outFields: ["*"],
+          placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน Feature Layer...",
+          suggestionTemplate: "{Name} - {Province}",
+          popupTemplate: {
+          title: "{Name}",
+          content: `
+            <b>ประเภท:</b> {MuseType}<br>
+            <b>จังหวัด:</b> {Province}<br>
+            <b>เวลาทำการ:</b> {OpenHours}<br>
+            <img src="{ImageURL}" width="200px">
+          `
+          }
+        },
+        {
+          layer: csvLayer,
+          name: "Found Museum",
+          searchFields: ["Name", "Province"],
+          displayField: "Name",
+          exactMatch: false,
+          outFields: ["*"],
+          placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน CSV Layer...",
+          suggestionTemplate: "{Name} - {Province}",
+          popupTemplate: {
+          title: "{Name}",
+          content: `
+            <b>ประเภท:</b> {MuseType}<br>
+            <b>จังหวัด:</b> {Province}<br>
+            <b>รายละเอียด:</b> {Description}<br>
+            <img src="{ImageURL}" width="200px">
+          `
+          }
+        }
+        ]
+      });
+      view.ui.add(searchWidget, {
+        position: "top-left",
+        index: 2
+      });
       });
     </script>
   </body>
