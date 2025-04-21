@@ -12,6 +12,7 @@
         margin: 0;
         padding: 0;
       }
+
     </style>
     <link
       rel="stylesheet"
@@ -27,6 +28,7 @@
   </head>
   <body>
     <div id="viewDiv"></div>
+
 
     <script> 
       require([
@@ -47,8 +49,8 @@
         title: "{Name}",
         content: `
           <b>ประเภท:</b> {MuseType}<br>
-          <b>จังหวัด:</b> {Province}<br>
-          <b>เวลาทำการ:</b> {OpenHours}<br>
+          <b>จังหวัด:</b> {Pronvice}<br>
+          <b>เวลาทำการ:</b> {Description}<br>
           <img src="{ImageURL}" width="200px">
         `
         }
@@ -193,7 +195,7 @@
           searchFields: ["Name", "Province"],
           displayField: "Name",
           exactMatch: false,
-          outFields: ["*"],
+          outFields: ["Name", "Province", "MuseType", "Description", "ImageURL"],
           placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน Feature Layer...",
           suggestionTemplate: "{Name} - {Province}",
           popupTemplate: {
@@ -201,7 +203,7 @@
           content: `
             <b>ประเภท:</b> {MuseType}<br>
             <b>จังหวัด:</b> {Province}<br>
-            <b>เวลาทำการ:</b> {OpenHours}<br>
+            <b>เวลาทำการ:</b> {Description}<br>
             <img src="{ImageURL}" width="200px">
           `
           }
@@ -212,7 +214,7 @@
           searchFields: ["Name", "Province"],
           displayField: "Name",
           exactMatch: false,
-          outFields: ["*"],
+          outFields: ["Name", "Province", "MuseType", "Description", "ImageURL"],
           placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน CSV Layer...",
           suggestionTemplate: "{Name} - {Province}",
           popupTemplate: {
@@ -228,10 +230,15 @@
         ]
       });
       view.ui.add(searchWidget, {
-        position: "top-left",
+        position: "manual",
         index: 2
       });
+     searchWidget.container.style.position = "absolute";
+     searchWidget.container.style.top = "10px";
+     searchWidget.container.style.left = "50%";
+     searchWidget.container.style.transform = "translateX(-50%)";
       });
+
     </script>
   </body>
 </html>
