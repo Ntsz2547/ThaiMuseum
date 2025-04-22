@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🌍 Incident Repor Web Application</title>
+    <title>Thai Museum</title>
     <style>
       html,
       body,
@@ -12,169 +12,155 @@
         margin: 0;
         padding: 0;
       }
+
+      .esri-widget {
+        font-family: Arial, sans-serif;
+      }
+
+      .custom-search {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+      }
     </style>
     <link
       rel="stylesheet"
       href="https://js.arcgis.com/4.27/esri/themes/light/main.css"
     />
     <script>
-      // *** แก้ apiKey เป็นของตัวเอง
       var esriConfig = {
         apiKey:
-          "AAPTxy8BH1VEsoebNVZXo8HurPLXVbze651K5NDgHExQjRqMPlLhNjrtoTuBlKB9p7c2JsBQkR-W9nAqn8b9QOPJFAermqzrchIsAP6kxaVFwkmePrKN7PripcPGYA5r_sJaQ8naMA4pnK5-OlByYQDJ4vMYx27IGCpCx3Q0NWx_ltnOp7EtBgTCEhuM_Ygy_uVzF7qYvcS5eGmmNz2kDxrxmYDGCIJjW0sTkOtS7dVg8OY.AT1_GZQqD3nq",
+          "AAPTxy8BH1VEsoebNVZXo8HurNJ2CoRxo3i6iJz33op9AG1zeCNpOwDjKVYK1VHCgh1LUCVtfbdVkdkkvpWDmaWXLvkWKiksNoI2IK53z9R_Sh8v7J-JEVVTJvtNt6QE8_EMQR5pJIUKK1go9gBVRynJiUhq0lif0TP2nG0syUcHlr_VbTuEdrAoVbnuPy_sSRi94St6vV9gjiMCctpQ37CPkDnOHPPzk7YzLpDtQ2LFrGI.AT1_JiJunJN8",
       };
     </script>
     <script src="https://js.arcgis.com/4.27/"></script>
   </head>
   <body>
     <div id="viewDiv"></div>
- 
+
     <script>
       require([
         "esri/Map",
         "esri/views/MapView",
         "esri/layers/FeatureLayer",
-        "esri/widgets/Search",
+        "esri/layers/CSVLayer",
         "esri/renderers/UniqueValueRenderer",
-        "esri/renderers/HeatmapRenderer",
-      ], function (Map, MapView, FeatureLayer, Search, UniqueValueRenderer, HeatmapRenderer) {
-        // โจทย์:
-        // 1. เปลี่ยน API Key เป็นของตัวเอง เพื่อให้เข้าถึง Feature Layer ที่ตัวเองสร้างได้
-        // 2. Add Feature Layer ที่เก็บข้อมูล Incident ไว้ ด้วย Url Map Service ของตัวเอง
-        // 3. แสดงรายการ Incident ที่ถูก Report เข้ามาบนแผนที่ โดยแบ่งแยก Symbol ตาม Field: "IncidentType" มากกว่า 2 Type ขึ้นไป
-        // เช่น ถ้า IncidentType เป็น "ไฟไหม้" ให้ Render ด้วย symbol นึง,  แต่ถ้าเป็น "น้ำท่วม" ให้ Render อีก symbol นึง (ตัวอย่าง จะกำหนด type อื่นๆก็ได้)
-        // 4. เวลา Zoom ไกลๆ จะต้องสามารถแสดงเป็น Heatmap ได้
-        // 5. เวลา Zoom ใกล้ๆ จะต้องสามารถแสดงเป็น Symbol ตามประเภทของ IncidentType ได้
-        // 6. จะต้องมี Search Widget ที่สามารถค้นหาข้อมูล Incident ได้ตาม "รายละเอียด, ชื่อผู้แจ้ง, และ ประเภทของ Incident"
-        // ระยะเวลา 1 ชั่วโมง
-        // Hint: ดูการบ้านเก่าๆ หรือดูลิ้งตัวอย่างด้านล่างเป็นตัวช่วย
-        // Feature Layer: https://developers.arcgis.com/javascript/latest/sample-code/layers-featurelayer/
-        // Render แบบแยกตาม type ใช้ https://developers.arcgis.com/javascript/latest/api-reference/esri-renderers-UniqueValueRenderer.html
-        // Render แบบ Heatmap:
-        // https://developers.arcgis.com/javascript/latest/sample-code/visualization-heatmap/
-        // https://developers.arcgis.com/javascript/latest/api-reference/esri-renderers-HeatmapRenderer.html
-        // Search Widget: https://developers.arcgis.com/javascript/latest/sample-code/widgets-search-3d/
- 
-        const uniqueRender = {
-          type: "unique-value",
-          field: "IncidentType",
-          defaultSymbol: {
-            type: "picture-marker",
-            url: "https://cdn-icons-png.flaticon.com/512/7334/7334593.png",
-            width: "48px",
-            height: "48px",
-          },
-          uniqueValueInfos: [
-            {
-              value: "ไฟไหม้",
-              symbol: {
-                type: "picture-marker",
-                url: "https://cdn-icons-png.flaticon.com/512/9922/9922138.png", //รูปไฟไหม้
-                width: "48px",
-                height: "48px",
-              },
-            },
-            {
-              value: "น้ำท่วม",
-              symbol: {
-                type: "picture-marker",
-                url: "https://cdn-icons-png.flaticon.com/512/17639/17639265.png", //รูปน้ำท่วม
-                width: "48px",
-                height: "48px",
-              },
-            },
-          ],
-        };
- 
-        const heatmapRenderer = {
-          type: "heatmap",
-          colorStops: [
-            { ratio: 0, color: "rgba(255, 255, 255, 0)" },
-            { ratio: 0.2, color: "rgba(255, 255, 255, 1)" },
-            { ratio: 0.5, color: "rgba(255, 140, 0, 1)" },
-            { ratio: 0.8, color: "rgba(255, 140, 0, 1)" },
-            { ratio: 1, color: "rgba(255, 0, 0, 1)" },
-          ],
-          minDensity: 0,
-          maxDensity: 0.01,
-          radius: 10,
-        };
- 
-        // 🔹 Define Pin Renderer
-        const pinRenderer = {
-          type: "simple",
-          symbol: {
-            type: "picture-marker",
-            url: "https://cdn-icons-png.flaticon.com/512/7334/7334593.png",
-            width: "48px",
-            height: "48px",
-          },
-        };
- 
-        // สร้าง FeatureLayer
-        const incidentFeatureLayer = new UniqueValueRenderer({
-          url: "https://services.arcgis.com/7DuUQqhsHnXFy4Oz/arcgis/rest/services/IncidentLayer/FeatureServer",
+        "esri/widgets/Editor",
+        "esri/widgets/Search",
+        "esri/widgets/Sketch",
+        "esri/widgets/Expand",
+        "esri/layers/GraphicsLayer",
+      ], function (
+        Map,
+        MapView,
+        FeatureLayer,
+        CSVLayer,
+        UniqueValueRenderer,
+        Editor,
+        Search,
+        Sketch,
+        Expand,
+        GraphicsLayer
+      ) {
+        const museumFeatureLayer = new FeatureLayer({
+          url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/MuseLayer/FeatureServer",
           outFields: ["*"],
-          renderer: heatmapRenderer,
           popupTemplate: {
-            title: "{IncidentType}",
+            title: "{Name}",
             content: `
-            <b>📍 ผู้แจ้งเหตุ:</b> {Reporter} <br>
-            <b>⭐ รายละเอียด:</b> {Description} <br>
-          `,
+              <b>ประเภท:</b> 🏛️ {MuseType}<br>
+              <b>จังหวัด:</b> 📍 {Province}<br>
+              <b>รายละเอียด:</b> 📝 {Description}<br>
+              <b>เวลาทำการ:</b> ⏰ {OpenHours}<br>
+            `,
           },
         });
- 
-        // 🔹 สร้างแผนที่
+
+        const csvLayer = new CSVLayer({
+          url: "./thai_museums.csv",
+          popupTemplate: {
+            title: "{Name}",
+            content: `
+              <b>ประเภท:</b> 🏛️ {MuseType}<br>
+              <b>จังหวัด:</b> 📍 {Province}<br>
+              <b>รายละเอียด:</b> 📝 {Description}<br>
+              <b>เวลาทำการ:</b> ⏰ {OpenHours}<br>
+              <img src="{ImageURL}" width="200px">
+            `,
+          },
+        });
+
         const map = new Map({
           basemap: "streets-navigation-vector",
-          layers: [incidentFeatureLayer],
+          layers: [museumFeatureLayer, csvLayer],
         });
- 
-        // 🔹 สร้าง View
+
         const view = new MapView({
           container: "viewDiv",
           map: map,
-          center: [100.5231, 13.7367], // พิกัดกลางของกรุงเทพฯ
-          zoom: 12,
+          center: [100.523816, 13.728993],
+          zoom: 13,
         });
- 
+
+        // Move Zoom Widget to bottom-right
+        view.ui.move("zoom", "bottom-right");
+
+        // Add Search Widget
         const searchWidget = new Search({
           view: view,
+          includeDefaultSources: false,
           sources: [
             {
-              layer: incidentFeatureLayer,
-              name: "Search Incident", // ชื่อสำหรับแสดง data source
-              searchFields: ["IncidentType", "Reporter", "Description"],
-              displayField: "IncidentType",
+              layer: museumFeatureLayer,
+              name: "Found Museum",
+              searchFields: ["Name", "Province"],
+              displayField: "Name",
               exactMatch: false,
-              outFields: ["*"],
-              placeholder: "🔍 ค้นหาร้านเหตุการณ์...",
-              suggestionTemplate: "{IncidentType} - {Reporter} - {Description}",
+              outFields: ["Name", "Province", "MuseType", "Description", "ImageURL"],
+              placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน Feature Layer...",
+              suggestionTemplate: "{Name} - {Province}",
               popupTemplate: {
-                title: "{IncidentType}",
+                title: "{Name}",
                 content: `
-                 <b>📍 ผู้แจ้งเหตุ:</b> {Reporter} <br>
-                 <b>⭐ รายละเอียด:</b> {Description} <br>
-                 `,
+                  <b>ประเภท:</b> {MuseType}<br>
+                  <b>จังหวัด:</b> {Province}<br>
+                  <b>รายละเอียด:</b> {Description}<br>
+                  <img src="{ImageURL}" width="200px">
+                `,
               },
             },
           ],
         });
-        view.ui.add(searchWidget, {
-          position: "top-right",
+
+        const searchExpand = new Expand({
+          view: view,
+          content: searchWidget,
+          expandIconClass: "esri-icon-search",
+          expandTooltip: "Search Museums",
         });
- 
-        // 🔹 Change Renderer on Zoom
-        view.watch("zoom", function (newZoom) {
-          if (newZoom >= 15) {
-            incidentFeatureLayer.renderer = uniqueRender; // Switch to pin renderer at higher zoom levels
-          } else {
-            incidentFeatureLayer.renderer = heatmapRenderer; // Use heatmap renderer at lower zoom levels
-          }
+
+        view.ui.add(searchExpand, "top-right");
+
+        // Add Sketch Widget
+        const graphicsLayer = new GraphicsLayer();
+        map.add(graphicsLayer);
+
+        const sketch = new Sketch({
+          view: view,
+          layer: graphicsLayer,
         });
+
+        const sketchExpand = new Expand({
+          view: view,
+          content: sketch,
+          expandIconClass: "esri-icon-edit",
+          expandTooltip: "Draw shapes to filter museums",
+        });
+
+        view.ui.add(sketchExpand, "top-left");
       });
     </script>
   </body>
 </html>
- 

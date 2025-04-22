@@ -13,6 +13,26 @@
         padding: 0;
       }
 
+      .esri-widget {
+        font-family: Arial,  sans-serif;
+      }
+
+      .custom-search {
+       position: absolute;
+       top: 10px;
+       left: 50%;
+       transform: translateX(-50%);
+       z-index: 10;
+       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+       border-radius: 8px;
+       overflow: hidden;
+      }
+
+     .esri-search {
+       border-radius: 8px !important;
+       font-family: Arial, sans-serif;
+      }
+
     </style>
     <link
       rel="stylesheet"
@@ -40,8 +60,9 @@
       "esri/widgets/Editor",
       "esri/widgets/Search",
       "esri/widgets/Sketch",
-      "esri/layers/GraphicsLayer"
-      ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer, Editor, Search, Sketch, GraphicsLayer) {
+      "esri/layers/GraphicsLayer",
+      "esri/widgets/Expand"
+      ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer, Editor, Search, Sketch, GraphicsLayer, Expand) {
         const museumFeatureLayer = new FeatureLayer({
           url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/MuseLayer/FeatureServer",
            outFields: ["*"],
@@ -141,6 +162,7 @@
         zoom: 13
       });
 
+      view.ui.move("zoom", "bottom-right");
       view.when(() => {
         const editor = new Editor({
         view: view,
@@ -151,7 +173,17 @@
           }
         ]
         });
-        view.ui.add(editor, "top-right");
+        const editorExpand = new Expand({
+        view: view,
+        content: editor,
+        expandIconClass: "esri-icon-edit",
+        expandTooltip: "Edit Museums"
+        });
+        view.ui.add(editorExpand, {
+          position: "top-left",
+          index: 0
+        });
+    
 
         const graphicsLayer = new GraphicsLayer();
         map.add(graphicsLayer);
@@ -161,9 +193,18 @@
         view: view,
         layer: graphicsLayer
         });
-        
-        view.ui.add(sketch, "top-left");
 
+        const sketchExpand = new Expand({
+        view: view,
+        content: sketch,
+        expandIconClass: "esri-icon-locate",
+        expandTooltip: "Draw Shapes"
+        });
+        view.ui.add(sketchExpand, {
+          position: "top-left",
+          index: 1
+        });
+        
         sketch.on("create", (event) => {
         if (event.state === "complete") {
           const geometry = event.graphic.geometry;
@@ -239,14 +280,18 @@
         }
         ]
       });
+
+
       view.ui.add(searchWidget, {
-        position: "manual",
+        position: "custom",
         index: 2
       });
-     searchWidget.container.style.position = "absolute";
-     searchWidget.container.style.top = "10px";
-     searchWidget.container.style.left = "50%";
-     searchWidget.container.style.transform = "translateX(-50%)";
+
+      const searchContainer = document.createElement("div");
+      searchContainer.className = "custom-search";
+      document.body.appendChild(searchContainer);
+      searchWidget.container = searchContainer;
+   
       });
       /* [Error] [esri.widgets.Search.SearchViewModel]
 q
