@@ -42,28 +42,37 @@
       "esri/widgets/Sketch",
       "esri/layers/GraphicsLayer"
       ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer, Editor, Search, Sketch, GraphicsLayer) {
-      const museumFeatureLayer = new FeatureLayer({
-        url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/MuseLayer/FeatureServer",
-        outFields: ["*"],
-        popupTemplate: {
-        title: "{Name}",
-        content: `
-          <b>ประเภท:</b> {MuseType}<br>
-          <b>จังหวัด:</b> {Pronvice}<br>
-          <b>เวลาทำการ:</b> {Description}<br>
-          <img src="{ImageURL}" width="200px">
-        `
-        }
-      });
+        const museumFeatureLayer = new FeatureLayer({
+          url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/MuseLayer/FeatureServer",
+           outFields: ["*"],
+            popupTemplate: {
+            title: "{Name}",
+            content: [
+            {
+            type: "text",
+            text: `
+              <b>ประเภท:</b> 🏛️ {MuseType}<br>
+              <b>จังหวัด:</b> 📍 {Province}<br>
+              <b>รายละเอียด:</b> 📝 {Description}<br>
+              <b>เวลาทำการ:</b> ⏰ {OpenHours}<br>
+            `
+            },
+            {
+            type: "attachments"  // แสดงไฟล์แนบ เช่น รูป
+            }
+           ]
+           }
+           });
 
       const csvLayer = new CSVLayer({
         url: "./thai_museums.csv",
         popupTemplate: {
         title: "{Name}",
         content: `
-          <b>ประเภท:</b> {MuseType}<br>
-          <b>จังหวัด:</b> {Province}<br>
-          <b>รายละเอียด:</b> {Description}
+            <b>ประเภท:</b> 🏛️ {MuseType}<br>
+            <b>จังหวัด:</b> 📍 {Province}<br>
+            <b>รายละเอียด:</b> 📝 {Description}<br>
+            <b>เวลาทำการ:</b> ⏰ {OpenHours}<br>
           <img src="{ImageURL}" width="200px">
         `
         }
@@ -152,6 +161,7 @@
         view: view,
         layer: graphicsLayer
         });
+        
         view.ui.add(sketch, "top-left");
 
         sketch.on("create", (event) => {
@@ -159,28 +169,28 @@
           const geometry = event.graphic.geometry;
 
           // Apply filter effect to museumFeatureLayer
-          museumFeatureLayer.effect = {
+          museumFeatureLayer.featureEffect = {
             filter: {
               geometry: geometry,
               spatialRelationship: "intersects"
             },
-            includeEffect: "drop-shadow(0px 0px 5px black)",
-            excludeEffect: "opacity(30%)"
+            includedEffect: "drop-shadow(0px 0px 5px black)",
+            excludedEffect: "opacity(30%)"
           };
 
           // Apply filter effect to csvLayer
-          csvLayer.effect = {
+          csvLayer.featureEffect = {
             filter: {
               geometry: geometry,
               spatialRelationship: "intersects"
             },
-            includeEffect: "drop-shadow(0px 0px 5px black)",
-            excludeEffect: "opacity(30%)"
+            includedEffect: "drop-shadow(0px 0px 5px black)",
+            excludedEffect: "opacity(30%)"
           };
         } else if (event.state === "cancel") {
           // Reset effects when drawing is canceled
-          museumFeatureLayer.effect = null;
-          csvLayer.effect = null;
+          museumFeatureLayer.featureEffect = null;
+          csvLayer.featureEffect = null;
         }
         });
       });

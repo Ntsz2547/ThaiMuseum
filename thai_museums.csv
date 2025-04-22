@@ -1,21 +1,42 @@
-Name,MuseType,Province,Description,Latitude,Longitude,ImageURL
-MOCA Bangkok,Art Museum,Bangkok,พิพิธภัณฑ์ศิลปะไทยร่วมสมัยที่แสดงงานศิลป์สมัยใหม่ทั้งของไทยและต่างประเทศ,13.8476,100.5615,https://upload.wikimedia.org/wikipedia/commons/3/35/MOCA_Bangkok_Thailand.jpg
-BACC,Art Museum,Bangkok,หอศิลปวัฒนธรรมกลางกรุงที่มีนิทรรศการหมุนเวียนและกิจกรรมศิลป์,13.7466,100.5308,https://zipevent.blob.core.windows.net/images/PublicSpace/space/D3420146-26F2-4A98-83AA-7F6C2E1C038F/gallery/D3420146-26F2-4A98-83AA-7F6C2E1C038F-50A8CFD1-D99B-4AEB-BAB0-581A01888832.jpeg
-National Gallery,Art Museum,Bangkok,พิพิธภัณฑสถานแห่งชาติด้านศิลปะตั้งอยู่ใกล้ถนนเจ้าฟ้า,13.7614,100.4945,https://upload.wikimedia.org/wikipedia/commons/e/e5/National_Gallery_Bangkok.jpg
-Arts of the Kingdom Museum,Cultural Museum,Ayutthaya,จัดแสดงศิลปะชั้นสูงของราชสำนักไทย เช่น เครื่องถมทอง,14.2297,100.5778,https://media.thailandtourismdirectory.go.th/th/file/get/file/20190425f38ad7b30d8a7770c86d7e18056c1a7e093447.jpg
-Baan Dam Museum,Art Museum,Chiang Rai,บ้านศิลป์สีดำของศิลปินถวัลย์ ดัชนี,19.9673,99.8325,https://upload.wikimedia.org/wikipedia/commons/1/17/Baan_Dam_Museum.jpg
-Art in Paradise,Art Museum,Chonburi,พิพิธภัณฑ์ภาพ 3 มิติอินเทอร์แอคทีฟ,12.9495,100.8870,https://upload.wikimedia.org/wikipedia/commons/b/b4/Art_in_Paradise_Pattaya.jpg
-Jim Thompson House Museum,Cultural Museum,Bangkok,บ้านไทยของนักธุรกิจผ้าไหมที่จัดแสดงงานศิลป์เอเชีย,13.7504,100.5285,https://upload.wikimedia.org/wikipedia/commons/5/56/Jim_Thompson_House.jpg
-Ban Chiang National Museum,Cultural Museum,Udon Thani,พิพิธภัณฑ์ที่แสดงหลักฐานโบราณคดีบ้านเชียง,17.4220,103.2410,https://upload.wikimedia.org/wikipedia/commons/5/5d/Ban_Chiang_National_Museum.jpg
-MAIIAM Contemporary Art Museum,Art Museum,Chiang Mai,พิพิธภัณฑ์ศิลปะร่วมสมัยเอกชนขนาดใหญ่ที่สุดของไทย,18.7689,99.1169,https://upload.wikimedia.org/wikipedia/commons/e/ea/MAIIAM_Chiang_Mai.jpg
-Chiang Mai Art Museum,Art Museum,Chiang Mai,พิพิธภัณฑ์ศิลป์ของมหาวิทยาลัยเชียงใหม่,18.7961,98.9629,https://upload.wikimedia.org/wikipedia/commons/6/60/Chiang_Mai_University_Art_Center.jpg
-Khon Kaen Contemporary Art Museum,Art Museum,Khon Kaen,พิพิธภัณฑ์แสดงผลงานศิลปินภาคอีสาน,16.4322,102.8350,https://upload.wikimedia.org/wikipedia/commons/b/b7/KhonKaenArtGallery.jpg
-Phuket Contemporary Art Museum,Art Museum,Phuket,พื้นที่จัดแสดงศิลปะร่วมสมัยบนเกาะภูเก็ต,7.8906,98.3853,https://upload.wikimedia.org/wikipedia/commons/4/4d/Phuket_Art_Zone.jpg
-Hat Yai Contemporary Art Museum,Art Museum,Songkhla,แหล่งจัดแสดงผลงานศิลปะของภาคใต้,7.0086,100.4747,https://upload.wikimedia.org/wikipedia/commons/a/ac/Hat_Yai_Contemporary_Art.jpg
-Nakhon Ratchasima Contemporary Art Museum,Art Museum,Nakhon Ratchasima,พิพิธภัณฑ์ศิลปะของภาคตะวันออกเฉียงเหนือ,14.9799,102.0977,https://upload.wikimedia.org/wikipedia/commons/3/3c/NakhonRatchasimaMuseum.jpg
-Surat Thani Contemporary Art Museum,Art Museum,Surat Thani,ศูนย์รวมผลงานศิลป์ร่วมสมัยในภาคใต้ตอนบน,9.1400,99.3333,https://upload.wikimedia.org/wikipedia/commons/9/9e/SuratThaniArt.jpg
-Silpa Bhirasri National Museum,Art Museum,Bangkok,พิพิธภัณฑ์ที่อุทิศให้กับผู้ก่อตั้งมหาวิทยาลัยศิลปากร,13.7517,100.4878,https://upload.wikimedia.org/wikipedia/commons/f/f4/Silpa_Bhirasri_Museum.jpg
-Ratchadamnoen Contemporary Art Center,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยบนถนนราชดำเนินกลาง,13.7555,100.5020,https://upload.wikimedia.org/wikipedia/commons/6/6b/RatchadamnoenArtCenter.jpg
-TCDC (Thailand Creative & Design Center),Cultural Museum,Bangkok,ศูนย์ส่งเสริมการออกแบบสร้างสรรค์และนิทรรศการ,13.7276,100.5345,https://images.adsttc.com/media/images/599b/9c7d/b22e/3825/2300/0076/large_jpg/005-DEPT_NewTCDC.jpg?1503370361
-Museum Siam,Cultural Museum,Bangkok,พิพิธภัณฑ์แนวใหม่เน้นการเรียนรู้เกี่ยวกับความเป็นไทย,13.7422,100.4925,https://upload.wikimedia.org/wikipedia/commons/5/5f/Museum_Siam_Bangkok.jpg
-Rama IX Art Museum,Art Museum,Bangkok,พิพิธภัณฑ์ศิลปะแห่งใหม่ภายใต้ชื่อในหลวง ร.9,13.6791,100.6302,https://upload.wikimedia.org/wikipedia/commons/8/8a/RamaIXArtMuseum.jpg
+Name,MuseType,Province,Description,Latitude,Longitude,OpenHours,ImageURL
+MOCA Bangkok,Art Museum,Bangkok,พิพิธภัณฑ์ศิลปะไทยร่วมสมัยที่แสดงงานศิลป์สมัยใหม่ทั้งของไทยและต่างประเทศ,13.8476,100.5615,10:00–18:00 (ปิดวันจันทร์),
+BACC (Bangkok Art and Culture Centre),Art Museum,Bangkok,หอศิลปวัฒนธรรมกลางกรุงที่มีนิทรรศการหมุนเวียนและกิจกรรมศิลป์,13.7466,100.5308,10:00–20:00,
+National Gallery,Art Museum,Bangkok,พิพิธภัณฑสถานแห่งชาติด้านศิลปะตั้งอยู่ใกล้ถนนเจ้าฟ้า,13.7614,100.4945,09:00–16:00 (ปิดวันจันทร์–อังคาร),
+MAIIAM Contemporary Art Museum,Art Museum,Chiang Mai,พิพิธภัณฑ์ศิลปะร่วมสมัยเอกชนขนาดใหญ่ที่สุดของไทย,18.7689,99.1169,10:00–18:00 (ปิดวันอังคาร),
+Chiang Mai Art Museum,Art Museum,Chiang Mai,พิพิธภัณฑ์ศิลป์ของมหาวิทยาลัยเชียงใหม่,18.7961,98.9629,09:00–17:00 (ปิดเสาร์–อาทิตย์),
+Baan Dam Museum,Art Museum,Chiang Rai,บ้านศิลป์สีดำของศิลปินถวัลย์ ดัชนี,19.9673,99.8325,09:00–17:00,
+Art in Paradise (Pattaya),Art Museum,Chonburi,พิพิธภัณฑ์ภาพ 3 มิติอินเทอร์แอคทีฟ,12.9495,100.8870,09:00–20:30,
+Silpa Bhirasri National Museum,Art Museum,Bangkok,พิพิธภัณฑ์ที่อุทิศให้กับผู้ก่อตั้งมหาวิทยาลัยศิลปากร,13.7517,100.4878,09:00–16:00,
+Ratchadamnoen Contemporary Art Center,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยบนถนนราชดำเนินกลาง,13.7555,100.5020,10:00–19:00,
+Tadu Contemporary Art,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยในกรุงเทพฯ,13.7471,100.5345,10:00–19:00,
+SAC Gallery,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยในกรุงเทพฯ,13.7631,100.5458,10:00–18:00 (ปิดวันจันทร์),
+Bangkok CityCity Gallery,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยในกรุงเทพฯ,13.7281,100.5366,13:00–18:00 (ปิดวันจันทร์–อังคาร),
+La Lanta Fine Art,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยในกรุงเทพฯ,13.7146,100.5839,10:00–18:00 (ปิดวันอาทิตย์),
+Nova Contemporary,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยในกรุงเทพฯ,13.7387,100.5414,11:00–19:00 (ปิดวันจันทร์),
+Over The Influence,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยในกรุงเทพฯ,13.7290,100.5418,11:00–19:00 (ปิดวันอาทิตย์–จันทร์),
+Richard Koh Gallery,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยในกรุงเทพฯ,13.7303,100.5437,10:00–18:00 (ปิดวันอาทิตย์),
+West Eden Gallery,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยในกรุงเทพฯ,13.7236,100.5339,11:00–18:00 (ปิดวันจันทร์),
+Sombat Permpoon Gallery,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยในกรุงเทพฯ,13.7483,100.5491,10:00–18:00,
+H Gallery,Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยในกรุงเทพฯ,13.7283,100.5249,10:00–18:00 (ปิดวันจันทร์),
+Bangkok University Gallery (BUG),Art Museum,Bangkok,แกลเลอรี่ศิลปะร่วมสมัยของมหาวิทยาลัยกรุงเทพ,13.7231,100.5371,10:00–16:00 (ปิดวันเสาร์–อาทิตย์),
+
+Museum Siam,Cultural Museum,Bangkok,พิพิธภัณฑ์แนวใหม่เน้นการเรียนรู้เกี่ยวกับความเป็นไทย,13.7422,100.4925,10:00–18:00 (ปิดวันจันทร์),
+Jim Thompson House Museum,Cultural Museum,Bangkok,บ้านไทยของนักธุรกิจผ้าไหมที่จัดแสดงงานศิลป์เอเชีย,13.7504,100.5285,10:00–18:00,
+Ban Chiang National Museum,Cultural Museum,Udon Thani,พิพิธภัณฑ์ที่แสดงหลักฐานโบราณคดีบ้านเชียง,17.4220,103.2410,09:00–16:00 (ปิดวันจันทร์–อังคาร),
+Arts of the Kingdom Museum,Cultural Museum,Ayutthaya,จัดแสดงศิลปะชั้นสูงของราชสำนักไทย เช่น เครื่องถมทอง,14.2297,100.5778,10:00–15:30 (ปิดวันจันทร์–อังคาร),
+The Museum of Floral Culture,Cultural Museum,Bangkok,พิพิธภัณฑ์วัฒนธรรมดอกไม้ใจกลางกรุงเทพฯ,13.8040,100.5269,10:00–17:00 (ปิดวันจันทร์),
+Bangkok National Museum,Cultural Museum,Bangkok,พิพิธภัณฑ์แห่งชาติที่ใหญ่ที่สุดในเอเชียตะวันออกเฉียงใต้,13.7612,100.4915,09:00–16:00 (ปิดวันจันทร์–อังคาร),
+Rattanakosin Exhibition Hall,Cultural Museum,Bangkok,นิทรรศการเกี่ยวกับประวัติศาสตร์ของกรุงเทพฯ,13.7564,100.5014,10:00–19:00 (ปิดวันจันทร์),
+Suan Pakkad Palace Museum,Cultural Museum,Bangkok,พิพิธภัณฑ์พระราชวังสวนผักกาด,13.7567,100.5372,09:00–16:00,
+Kamthieng House Museum,Cultural Museum,Bangkok,พิพิธภัณฑ์บ้านคำเที่ยง,13.7394,100.5604,09:00–17:00 (ปิดวันอาทิตย์–จันทร์),
+King Prajadhipok Museum,Cultural Museum,Bangkok,พิพิธภัณฑ์พระบาทสมเด็จพระปกเกล้าเจ้าอยู่หัว,13.7523,100.5045,09:00–16:00 (ปิดวันจันทร์),
+Erawan Museum,Cultural Museum,Samut Prakan,พิพิธภัณฑ์เอราวัณ,13.6305,100.6040,09:00–18:00,
+Ancient City (Muang Boran),Cultural Museum,Samut Prakan,เมืองโบราณ,13.5392,100.6170,09:00–18:00,
+Thai Human Imagery Museum,Cultural Museum,Nakhon Pathom,พิพิธภัณฑ์หุ่นขี้ผึ้งไทย,13.8043,99.9550,09:00–17:30,
+Siriraj Medical Museum,Cultural Museum,Bangkok,พิพิธภัณฑ์การแพทย์ศิริราช,13.7593,100.4894,10:00–17:00 (ปิดวันอาทิตย์–จันทร์),
+Princess Maha Chakri Sirindhorn Anthropology Centre,Cultural Museum,Bangkok,ศูนย์มานุษยวิทยาสิรินธร,13.7646,100.5383,09:30–16:30 (ปิดวันจันทร์),
+Museum of Thai Classical Music,Cultural Museum,Bangkok,พิพิธภัณฑ์ดนตรีไทยคลาสสิก,13.7837,100.4171,10:00–16:00,
+Thai Labour Museum,Cultural Museum,Bangkok,พิพิธภัณฑ์แรงงานไทย,13.7456,100.5211,10:00–16:00 (ปิดวันจันทร์–อังคาร),
+Bangkok Folk Museum,Cultural Museum,Bangkok,พิพิธภัณฑ์พื้นบ้านกรุงเทพฯ,13.7304,100.5149,10:00–16:00 (ปิดวันจันทร์–อังคาร),
+Bank of Thailand Museum,Cultural Museum,Bangkok,พิพิธภัณฑ์ธนาคารแห่งประเทศไทย,13.7507,100.4975,09:30–16:00 (จองล่วงหน้า),
+Thai Life Permanent Exhibition Hall,Cultural Museum,Nonthaburi,นิทรรศการถาวรชีวิตไทย,13.8472,100.5011,09:00–17:00,
