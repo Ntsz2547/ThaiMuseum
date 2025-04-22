@@ -15,6 +15,9 @@
 
       .esri-widget {
         font-family: Arial, sans-serif;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
       }
 
       .custom-search {
@@ -23,7 +26,41 @@
         left: 50%;
         transform: translateX(-50%);
         z-index: 10;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        background-color: white;
+        padding: 5px;
       }
+
+      .esri-search {
+        border-radius: 8px !important;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+      }
+
+      .esri-search__input {
+        border-radius: 8px !important;
+        padding: 5px 10px !important;
+        background-color: #f0f0f0 !important;
+        border: 1px solid #ccc !important;
+      }
+
+      .esri-serch_suggestion {
+        border-radius: 8px !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+      }
+
+      .widget-container {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px; /* ระยะห่างระหว่าง Widget */
+        z-index: 10;
+      }
+
     </style>
     <link
       rel="stylesheet"
@@ -40,127 +77,273 @@
   <body>
     <div id="viewDiv"></div>
 
-    <script>
+
+    <script> 
       require([
-        "esri/Map",
-        "esri/views/MapView",
-        "esri/layers/FeatureLayer",
-        "esri/layers/CSVLayer",
-        "esri/renderers/UniqueValueRenderer",
-        "esri/widgets/Editor",
-        "esri/widgets/Search",
-        "esri/widgets/Sketch",
-        "esri/widgets/Expand",
-        "esri/layers/GraphicsLayer",
-      ], function (
-        Map,
-        MapView,
-        FeatureLayer,
-        CSVLayer,
-        UniqueValueRenderer,
-        Editor,
-        Search,
-        Sketch,
-        Expand,
-        GraphicsLayer
-      ) {
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/layers/CSVLayer",
+      "esri/renderers/UniqueValueRenderer",
+      "esri/widgets/Editor",
+      "esri/widgets/Search",
+      "esri/widgets/Sketch",
+      "esri/layers/GraphicsLayer",
+      "esri/widgets/Expand"
+      ], function (Map, MapView, FeatureLayer, CSVLayer, UniqueValueRenderer, Editor, Search, Sketch, GraphicsLayer, Expand) {
         const museumFeatureLayer = new FeatureLayer({
           url: "https://services2.arcgis.com/6BFEWLVwrkq1Nfkk/arcgis/rest/services/MuseLayer/FeatureServer",
-          outFields: ["*"],
-          popupTemplate: {
+           outFields: ["*"],
+            popupTemplate: {
             title: "{Name}",
-            content: `
-              <b>ประเภท:</b> 🏛️ {MuseType}<br>
-              <b>จังหวัด:</b> 📍 {Province}<br>
-              <b>รายละเอียด:</b> 📝 {Description}<br>
-              <b>เวลาทำการ:</b> ⏰ {OpenHours}<br>
-            `,
-          },
-        });
-
-        const csvLayer = new CSVLayer({
-          url: "./thai_museums.csv",
-          popupTemplate: {
-            title: "{Name}",
-            content: `
-              <b>ประเภท:</b> 🏛️ {MuseType}<br>
-              <b>จังหวัด:</b> 📍 {Province}<br>
-              <b>รายละเอียด:</b> 📝 {Description}<br>
-              <b>เวลาทำการ:</b> ⏰ {OpenHours}<br>
-              <img src="{ImageURL}" width="200px">
-            `,
-          },
-        });
-
-        const map = new Map({
-          basemap: "streets-navigation-vector",
-          layers: [museumFeatureLayer, csvLayer],
-        });
-
-        const view = new MapView({
-          container: "viewDiv",
-          map: map,
-          center: [100.523816, 13.728993],
-          zoom: 13,
-        });
-
-        // Move Zoom Widget to bottom-right
-        view.ui.move("zoom", "bottom-right");
-
-        // Add Search Widget
-        const searchWidget = new Search({
-          view: view,
-          includeDefaultSources: false,
-          sources: [
+            content: [
             {
-              layer: museumFeatureLayer,
-              name: "Found Museum",
-              searchFields: ["Name", "Province"],
-              displayField: "Name",
-              exactMatch: false,
-              outFields: ["Name", "Province", "MuseType", "Description", "ImageURL"],
-              placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน Feature Layer...",
-              suggestionTemplate: "{Name} - {Province}",
-              popupTemplate: {
-                title: "{Name}",
-                content: `
-                  <b>ประเภท:</b> {MuseType}<br>
-                  <b>จังหวัด:</b> {Province}<br>
-                  <b>รายละเอียด:</b> {Description}<br>
-                  <img src="{ImageURL}" width="200px">
-                `,
-              },
+            type: "text",
+            text: `
+              <b>ประเภท:</b> 🏛️ {MuseType}<br>
+              <b>จังหวัด:</b> 📍 {Province}<br>
+              <b>รายละเอียด:</b> 📝 {Description}<br>
+              <b>เวลาทำการ:</b> ⏰ {OpenHours}<br>
+            `
             },
-          ],
+            {
+            type: "attachments"  // แสดงไฟล์แนบ เช่น รูป
+            }
+           ]
+           }
+           });
+
+      const csvLayer = new CSVLayer({
+        url: "./thai_museums.csv",
+        popupTemplate: {
+        title: "{Name}",
+        content: `
+            <b>ประเภท:</b> 🏛️ {MuseType}<br>
+            <b>จังหวัด:</b> 📍 {Province}<br>
+            <b>รายละเอียด:</b> 📝 {Description}<br>
+            <b>เวลาทำการ:</b> ⏰ {OpenHours}<br>
+          <img src="{ImageURL}" width="200px">
+        `
+        }
+      });
+
+      const museumRenderer = new UniqueValueRenderer({
+        field: "MuseType",
+        uniqueValueInfos: [
+        {
+          value: "Art Museum",
+          symbol: {
+          type: "picture-marker",
+          url: "/assets/artpin.png",
+          width:"20px",
+          height:"20px",
+          },
+          label: "พิพิธภัณฑ์ศิลปะ"
+        },
+        {
+          value: "Cultural Museum",
+          symbol: {
+          type: "picture-marker",
+          url: "/assets/culturalpin.png",
+          width:"20px",
+          height:"20px",
+          },
+          label: "พิพิธภัณฑ์วัฒนธรรม"
+        }
+        ]
+      });
+      museumFeatureLayer.renderer = museumRenderer;
+
+      const csvRenderer = {
+        type: "unique-value",
+        field: "MuseType",
+        uniqueValueInfos: [
+        {
+          value: "Art Museum",
+          symbol: {
+          type: "picture-marker",
+          url: "/assets/artpin.png",
+          width: "20px",
+          height: "20px",
+          },
+          label: "พิพิธภัณฑ์ศิลปะ"
+        },
+        {
+          value: "Cultural Museum",
+          symbol: {
+          type: "picture-marker",
+          url: "/assets/culturalpin.png",
+          width:"20px",
+          height:"20px",
+          },
+          label: "พิพิธภัณฑ์วัฒนธรรม"
+        }
+        ]
+      };
+      csvLayer.renderer = csvRenderer;
+      
+      const map = new Map({
+        basemap: "streets-navigation-vector",
+        layers: [museumFeatureLayer, csvLayer]
+      });
+
+      const view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [100.523816, 13.728993],
+        zoom: 13
+      });
+
+      view.ui.move("zoom", "bottom-right");
+      view.when(() => {
+        const editor = new Editor({
+        view: view,
+        layerInfos: [
+          {
+          layer: museumFeatureLayer,
+          enabled: true
+          }
+        ]
         });
-
-        const searchExpand = new Expand({
-          view: view,
-          content: searchWidget,
-          expandIconClass: "esri-icon-search",
-          expandTooltip: "Search Museums",
+        const editorExpand = new Expand({
+        view: view,
+        content: editor,
+        expandIconClass: "esri-icon-edit",
+        expandTooltip: "Edit Museums"
         });
+        view.ui.add(editorExpand, {
+          position: "top-left",
+          index: 0
+        });
+    
 
-        view.ui.add(searchExpand, "top-right");
-
-        // Add Sketch Widget
         const graphicsLayer = new GraphicsLayer();
         map.add(graphicsLayer);
 
+        // Create a Sketch widget for drawing shapes
         const sketch = new Sketch({
-          view: view,
-          layer: graphicsLayer,
+        view: view,
+        layer: graphicsLayer
         });
 
         const sketchExpand = new Expand({
-          view: view,
-          content: sketch,
-          expandIconClass: "esri-icon-edit",
-          expandTooltip: "Draw shapes to filter museums",
+        view: view,
+        content: sketch,
+        expandIconClass: "esri-icon-polygon",
+        expandTooltip: "Draw Shapes"
         });
+        view.ui.add(sketchExpand, {
+          position: "top-left",
+          index: 1
+        });
+        
+        sketch.on("create", (event) => {
+        if (event.state === "complete") {
+          const geometry = event.graphic.geometry;
 
-        view.ui.add(sketchExpand, "top-left");
+          // Apply filter effect to museumFeatureLayer
+          museumFeatureLayer.featureEffect = {
+            filter: {
+              geometry: geometry,
+              spatialRelationship: "intersects"
+            },
+            includedEffect: "drop-shadow(0px 0px 5px black)",
+            excludedEffect: "opacity(30%)"
+          };
+
+          // Apply filter effect to csvLayer
+          csvLayer.featureEffect = {
+            filter: {
+              geometry: geometry,
+              spatialRelationship: "intersects"
+            },
+            includedEffect: "drop-shadow(0px 0px 5px black)",
+            excludedEffect: "opacity(30%)"
+          };
+        } else if (event.state === "cancel") {
+          // Reset effects when drawing is canceled
+          museumFeatureLayer.featureEffect = null;
+          csvLayer.featureEffect = null;
+        }
+        });
       });
+
+      const searchWidget = new Search({
+        view: view,
+        includeDefaultSources: false,
+        sources: [
+        {
+          layer: museumFeatureLayer,
+          name: "FeatureLayer Museum ",
+          searchFields: ["Name", "Province"],
+          displayField: "Name",
+          exactMatch: false,
+          outFields: ["Name", "Province", "MuseType", "Description", "ImageURL"],
+          placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน Feature Layer...",
+          suggestionTemplate: "{Name} - {Province}",
+          popupTemplate: {
+          title: "{Name}",
+          content: `
+            <b>ประเภท:</b> {MuseType}<br>
+            <b>จังหวัด:</b> {Province}<br>
+            <b>เวลาทำการ:</b> {Description}<br>
+            <img src="{ImageURL}" width="200px">
+          `
+          }
+        },
+        {
+          layer: csvLayer,
+          name: "CSVLayer Museum",
+          searchFields: ["Name", "Province"],
+          displayField: "Name",
+          exactMatch: false,
+          outFields: ["Name", "Province", "MuseType", "Description", "ImageURL"],
+          placeholder: "🔍 ค้นหาพิพิธภัณฑ์ใน CSV Layer...",
+          suggestionTemplate: "{Name} - {Province}",
+          popupTemplate: {
+          title: "{Name}",
+          content: `
+            <b>ประเภท:</b> {MuseType}<br>
+            <b>จังหวัด:</b> {Province}<br>
+            <b>รายละเอียด:</b> {Description}<br>
+            <img src="{ImageURL}" width="200px">
+          `
+          }
+        }
+        ]
+      });
+
+
+      view.ui.add(searchWidget, {
+        position: "custom",
+        index: 2
+      });
+
+      const searchContainer = document.createElement("div");
+      searchContainer.className = "custom-search";
+      document.body.appendChild(searchContainer);
+      searchWidget.container = searchContainer;
+   
+      });
+      /* [Error] [esri.widgets.Search.SearchViewModel]
+q
+
+details: undefined
+
+message: "search field is invalid."
+
+name: "getResults():invalid-field"
+
+ต้นแบบ q
+(ฟังก์ชั่นไม่มีชื่อ) (init.js:149:273)
+(ฟังก์ชั่นไม่มีชื่อ) (init.js:148:509)
+(ฟังก์ชั่นไม่มีชื่อ) (init.js:146:513)
+(ฟังก์ชั่นไม่มีชื่อ) (Search.js:36:138)
+(ฟังก์ชั่นไม่มีชื่อ) (Search.js:36:417)
+forEach
+(ฟังก์ชั่นไม่มีชื่อ) (Search.js:36:382)
+(ฟังก์ชั่นไม่มีชื่อ) (Search.js:20:344)*/
+
     </script>
   </body>
 </html>
