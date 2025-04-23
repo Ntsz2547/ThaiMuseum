@@ -76,8 +76,6 @@
   </head>
   <body>
     <div id="viewDiv"></div>
-
-
     <script> 
       require([
       "esri/Map",
@@ -106,7 +104,7 @@
               <b>เวลาทำการ:</b> ⏰ {OpenHours}<br>
               <img src="{ImageURL}" width="200px">
             `
-            },
+            }
            ]
            }
            });
@@ -323,25 +321,6 @@
       searchWidget.container = searchContainer;
    
       });
-      /* [Error] [esri.widgets.Search.SearchViewModel]
-q
-
-details: undefined
-
-message: "search field is invalid."
-
-name: "getResults():invalid-field"
-
-ต้นแบบ q
-(ฟังก์ชั่นไม่มีชื่อ) (init.js:149:273)
-(ฟังก์ชั่นไม่มีชื่อ) (init.js:148:509)
-(ฟังก์ชั่นไม่มีชื่อ) (init.js:146:513)
-(ฟังก์ชั่นไม่มีชื่อ) (Search.js:36:138)
-(ฟังก์ชั่นไม่มีชื่อ) (Search.js:36:417)
-forEach
-(ฟังก์ชั่นไม่มีชื่อ) (Search.js:36:382)
-(ฟังก์ชั่นไม่มีชื่อ) (Search.js:20:344)*/
-
     </script>
   </body>
 </html>
